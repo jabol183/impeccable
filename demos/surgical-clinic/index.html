@@ -339,11 +339,12 @@ section{position:relative}
 .reviews-foot{display:flex;flex-wrap:wrap;gap:.75rem 1.5rem;justify-content:space-between;align-items:center;margin-top:1.25rem;font-size:.9rem;color:var(--muted)}
 
 /* ---------- What to expect: the route ---------- */
-.route{position:relative;display:grid;gap:0;--progress:0}
-.route::before,.route::after{content:"";position:absolute;left:1.05rem;top:1.4rem;bottom:1.4rem;width:4px;border-radius:2px}
-.route::before{background:repeating-linear-gradient(to bottom,var(--rule-strong) 0 10px,transparent 10px 18px)}
-.route::after{background:var(--ink);transform-origin:top;transform:scaleY(var(--progress));transition:transform 1.4s var(--ease)}
-.stop{position:relative;display:grid;grid-template-columns:2.6rem 1fr;gap:1rem;padding:0 0 2rem}
+.route{position:relative;display:grid;gap:0}
+.stop:not(:last-child)::before,.stop:not(:last-child)::after{content:"";position:absolute;left:1.05rem;top:2.35rem;bottom:0;width:4px;border-radius:2px}
+.stop:not(:last-child)::before{background:repeating-linear-gradient(to bottom,var(--rule-strong) 0 10px,transparent 10px 18px)}
+.stop:not(:last-child)::after{background:var(--ink);transform-origin:top;transform:scaleY(0);transition:transform .5s var(--ease)}
+.stop.lit:not(:last-child)::after{transform:scaleY(1)}
+.stop{position:relative;display:grid;grid-template-columns:2.6rem 1fr;align-content:start;gap:1rem;padding:0 0 2rem}
 .stop:last-child{padding-bottom:0}
 .dot{position:relative;z-index:1;width:2.35rem;height:2.35rem;border-radius:50%;background:var(--paper);border:3px solid var(--rule-strong);display:grid;place-items:center;font:700 1.05rem/1 var(--f-board);color:var(--muted);transition:background-color .4s,border-color .4s,color .4s;padding-top:.1rem}
 .stop.lit .dot{background:var(--yellow);border-color:var(--ink);color:var(--ink)}
@@ -353,14 +354,17 @@ section{position:relative}
 .stop p{max-width:30rem;color:var(--text);line-height:1.55}
 @media (min-width:960px){
   .route{grid-template-columns:repeat(5,1fr);gap:1.25rem}
-  .route::before,.route::after{left:1.2rem;right:1.2rem;top:1.05rem;bottom:auto;height:4px;width:auto}
-  .route::before{background:repeating-linear-gradient(to right,var(--rule-strong) 0 10px,transparent 10px 18px)}
-  .route::after{transform-origin:left;transform:scaleX(var(--progress))}
-  .stop{grid-template-columns:1fr;gap:1rem;padding:0}
+  .stop:not(:last-child)::before,.stop:not(:last-child)::after{left:2.35rem;top:1.05rem;bottom:auto;height:4px;width:calc(100% + 1.25rem - 2.35rem)}
+  .stop:not(:last-child)::before{background:repeating-linear-gradient(to right,var(--rule-strong) 0 10px,transparent 10px 18px)}
+  .stop:not(:last-child)::after{transform-origin:left;transform:scaleX(0)}
+  .stop.lit:not(:last-child)::after{transform:scaleX(1)}
+  .stop{grid-template-columns:1fr;gap:1.1rem;padding:0}
+  .stop p{padding-right:.5rem}
+  .stop-board h3{font-size:clamp(1.15rem,1.5vw,1.45rem);white-space:nowrap}
 }
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .route::after,.dot,.btn,.timetable tbody tr{transition:none}
+  .stop::after,.dot,.btn,.timetable tbody tr{transition:none}
 }
 
 /* ---------- FAQ: enquiry ---------- */
@@ -1309,8 +1313,7 @@ var CONFIG = {
   /* ---------- Route: light the stops as the section arrives ---------- */
   var route = $("#route"), stops = $$(".stop", route);
   function lightRoute(){
-    if (reduceMotion) { route.style.setProperty("--progress", 1); stops.forEach(function(s){ s.classList.add("lit"); }); return; }
-    route.style.setProperty("--progress", 1);
+    if (reduceMotion) { stops.forEach(function(s){ s.classList.add("lit"); }); return; }
     stops.forEach(function(s, i){ setTimeout(function(){ s.classList.add("lit"); }, 120 + i * 260); });
   }
   if ("IntersectionObserver" in window) {
