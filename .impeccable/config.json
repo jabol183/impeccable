@@ -15,6 +15,15 @@
         ],
         "createdAt": "2026-07-17T00:00:00.000Z",
         "reason": "Live overlay chrome is injected over arbitrary host pages and builds a self-contained UI with its own small type scale; DESIGN.md's ramp describes the impeccable website, not this widget"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "demos/surgical-clinic/index.html"
+        ],
+        "createdAt": "2026-10-13T19:32:22.644Z",
+        "reason": "agent: standalone client demo in its own visual world; repo DESIGN.md describes Impeccable's brand, not this clinic"
       }
     ]
   },
